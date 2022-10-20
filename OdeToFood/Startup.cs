@@ -1,3 +1,5 @@
+
+using AspNetCore.Unobtrusive.Ajax;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -8,6 +10,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using OdeToFood.Data;
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,6 +34,7 @@ namespace OdeToFood
 							options.UseSqlServer(
 											Configuration.GetConnectionString("DefaultConnection")));
 			services.AddDatabaseDeveloperPageExceptionFilter();
+			services.AddUnobtrusiveAjax();
 
 			services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
 							.AddEntityFrameworkStores<ApplicationDbContext>();
@@ -53,7 +57,7 @@ namespace OdeToFood
 			}
 			app.UseHttpsRedirection();
 			app.UseStaticFiles();
-
+			app.UseUnobtrusiveAjax();
 			app.UseRouting();
 
 			app.UseAuthentication();
