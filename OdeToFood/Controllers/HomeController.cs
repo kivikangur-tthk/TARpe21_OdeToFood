@@ -1,4 +1,5 @@
 ﻿using AspNetCore.Unobtrusive.Ajax;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using OdeToFood.Data;
@@ -11,6 +12,7 @@ using X.PagedList;
 
 namespace OdeToFood.Controllers
 {
+	[Authorize(Roles ="administrators,sales")]
 	public class HomeController : Controller
 	{
 		private readonly ApplicationDbContext _db;
@@ -19,7 +21,7 @@ namespace OdeToFood.Controllers
 		{
 			_db = dbContext;
 		}
-
+		[AllowAnonymous]
 		public IActionResult Autocomplete(string term)
 		{
 			var model = _db.Restaurants
@@ -28,7 +30,7 @@ namespace OdeToFood.Controllers
 				.Select(r => new { label = r.Name });
 			return Json(model);
 		}
-
+		[AllowAnonymous]
 		public IActionResult Index(string searchTerm = null, int page = 1)
 		{
 			var model = _db.Restaurants
@@ -57,6 +59,7 @@ namespace OdeToFood.Controllers
 		{
 			return View();
 		}
+
 		public IActionResult About()
 		{
 			var model = new AboutModel();
